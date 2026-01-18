@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { signInWithGoogle, db } from './firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, arrayUnion, addDoc, collection } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 import Terminal from './components/Terminal';
 import Countdown from './components/Countdown';
@@ -294,8 +294,8 @@ function App() {
   };
 
   // Logic to handle module form clicks
-  const handleModuleJoin = (moduleName: string) => {
-    if (!registeredUser) return;
+  const handleModuleJoin = async (moduleName: string) => {
+    if (!registeredUser || !firebaseUser) return;
 
     setRegisteredUser(prev => {
       if (!prev) return null;
@@ -308,6 +308,28 @@ function App() {
         registeredEvents: [...currentEvents, moduleName]
       };
     });
+
+    try {
+      // 1. Persist to User Document
+      const userRef = doc(db, "users", firebaseUser.uid);
+      await updateDoc(userRef, {
+        registeredEvents: arrayUnion(moduleName)
+      });
+
+      // 2. Generate Log Entry
+      await addDoc(collection(db, "booking_logs"), {
+        userId: firebaseUser.uid,
+        username: registeredUser.username,
+        moduleName: moduleName,
+        timestamp: new Date().toISOString(),
+        action: "FORM_ACCESSED",
+        details: `User opened registration form for ${moduleName}`
+      });
+      console.log("✅ [DB] Booking log created and user profile updated.");
+
+    } catch (error) {
+      console.error("❌ [DB] Error updating booking logs:", error);
+    }
   };
 
   const handleHomeBack = () => {
