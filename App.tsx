@@ -1,6 +1,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { signInWithGoogle } from './firebase';
+import { signInWithGoogle, db } from './firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { User } from 'firebase/auth';
 import Terminal from './components/Terminal';
 import Countdown from './components/Countdown';
 import Background from './components/Background';
@@ -29,6 +31,9 @@ export interface UserData {
   phone: string;
   regId?: string;
   registeredEvents?: string[]; // Track events the user has filled forms for
+  email?: string;
+  photoURL?: string;
+  googleName?: string;
 }
 
 // --- PROFILE CARD COMPONENT ---
@@ -73,9 +78,13 @@ const ProfileCard: React.FC<{
           </p>
 
           <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-fuchsia-500/5 border border-fuchsia-500/20 flex items-center justify-center mb-5 relative group overflow-hidden shadow-[0_0_35px_rgba(217,70,239,0.15)] shrink-0">
-            <svg className="w-12 h-12 md:w-14 md:h-14 text-fuchsia-500/80" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-            </svg>
+            {user.photoURL ? (
+              <img src={user.photoURL} alt="User Profile" className="w-full h-full object-cover rounded-full" />
+            ) : (
+              <svg className="w-12 h-12 md:w-14 md:h-14 text-fuchsia-500/80" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+              </svg>
+            )}
             <div className="absolute inset-0 pointer-events-none">
               <div className="absolute top-0 left-0 w-full h-[2px] bg-fuchsia-400/40 animate-[profile-scan_4s_linear_infinite]"></div>
             </div>
@@ -151,6 +160,7 @@ function App() {
   const [signInPhase, setSignInPhase] = useState<'IDLE' | 'BLURRING'>('IDLE');
 
   const [registeredUser, setRegisteredUser] = useState<UserData | null>(null);
+  const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
   const [isProfileCardOpen, setIsProfileCardOpen] = useState(false);
   const [isProfileClosing, setIsProfileClosing] = useState(false);
 
@@ -211,13 +221,26 @@ function App() {
         const user = await signInWithGoogle();
 
         if (user) {
+          setFirebaseUser(user);
           console.log('✅ [LOG] Sign-in Done!');
 
-          // After initial blur onset, move to the registration view
-          setTimeout(() => {
+          // CHECK FIRESTORE FOR EXISTING USER
+          const userDocRef = doc(db, "users", user.uid);
+          const userDocSnap = await getDoc(userDocRef);
+
+          if (userDocSnap.exists()) {
+            console.log('✅ [LOG] User already exists in DB. Logging in...');
+            const userData = userDocSnap.data() as UserData;
+            setRegisteredUser(userData);
             setSignInPhase('IDLE');
-            setRegistrationPhase('EXPANDED');
-          }, 1200);
+            // Do NOT go to registration phase, just stay logged in
+          } else {
+            // New user, proceed to registration form
+            setTimeout(() => {
+              setSignInPhase('IDLE');
+              setRegistrationPhase('EXPANDED');
+            }, 1200);
+          }
         } else {
           // User closed popup or failed
           console.log('Sign-up Failed!!');
@@ -247,6 +270,7 @@ function App() {
 
       setTimeout(() => {
         setRegisteredUser(null);
+        setFirebaseUser(null);
         setRegistrationPhase('IDLE');
         setDashboardPhase('IDLE');
       }, 500);
@@ -535,8 +559,14 @@ function App() {
           </header>
 
           <div className="flex-1 w-full relative overflow-hidden mt-20 md:mt-24">
-            {registrationPhase === 'EXPANDED' ? (
-              <UserSignup onSuccess={handleRegistrationSuccess} />
+            {registrationPhase === 'EXPANDED' && firebaseUser ? (
+              <UserSignup
+                onSuccess={handleRegistrationSuccess}
+                uid={firebaseUser.uid}
+                email={firebaseUser.email || ''}
+                photoURL={firebaseUser.photoURL || ''}
+                googleName={firebaseUser.displayName || ''}
+              />
             ) : dashboardPhase === 'EXPANDED' ? (
               <UserDashboard
                 user={registeredUser}

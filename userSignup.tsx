@@ -1,6 +1,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { UserData } from './App';
+import { db } from './firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 const COLLEGES = [
   "ASSAM UNIVERSITY SILCHAR",
@@ -12,9 +14,13 @@ const COLLEGES = [
 
 interface UserSignupProps {
   onSuccess?: (userData: UserData) => void;
+  uid: string;
+  email: string;
+  photoURL: string;
+  googleName: string;
 }
 
-const UserSignup: React.FC<UserSignupProps> = ({ onSuccess }) => {
+const UserSignup: React.FC<UserSignupProps> = ({ onSuccess, uid, email, photoURL, googleName }) => {
   const [formData, setFormData] = useState({
     username: '',
     firstName: '',
@@ -27,21 +33,21 @@ const UserSignup: React.FC<UserSignupProps> = ({ onSuccess }) => {
   // Master gate: No errors show until the first submit button hit
   const [hasSubmittedOnce, setHasSubmittedOnce] = useState(false);
   const [shakeFields, setShakeFields] = useState<Record<string, boolean>>({});
-  
+
   // Submission Status Logic
   const [submissionPhase, setSubmissionPhase] = useState<'IDLE' | 'PROCESSING' | 'SUCCESS'>('IDLE');
-  
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isSubmitHovered, setIsSubmitHovered] = useState(false);
   const [isSubmitGlitching, setIsSubmitGlitching] = useState(false);
-  
+
   // Track focus for individual numeric blocks
   const [focusedPhoneIdx, setFocusedPhoneIdx] = useState<number | null>(null);
   const [focusedRegIdIdx, setFocusedRegIdIdx] = useState<number | null>(null);
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
-  
+
   const [phoneDigits, setPhoneDigits] = useState<string[]>(new Array(10).fill(''));
   const phoneRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -60,7 +66,7 @@ const UserSignup: React.FC<UserSignupProps> = ({ onSuccess }) => {
 
   const isFieldValid = (name: string): boolean => {
     if (name === 'middleName') return true;
-    if (name === 'username') return formData.username.length >= 8; 
+    if (name === 'username') return formData.username.length >= 8;
     if (name === 'firstName') return !!formData.firstName;
     if (name === 'lastName') return !!formData.lastName;
     if (name === 'college') return !!formData.college;
@@ -104,10 +110,10 @@ const UserSignup: React.FC<UserSignupProps> = ({ onSuccess }) => {
   };
 
   const handleCollegeSelect = (college: string) => {
-    setFormData({ 
-      ...formData, 
+    setFormData({
+      ...formData,
       college,
-      otherCollege: '' 
+      otherCollege: ''
     });
     setRegIdDigits(new Array(11).fill(''));
     setIsDropdownOpen(false);
@@ -135,7 +141,7 @@ const UserSignup: React.FC<UserSignupProps> = ({ onSuccess }) => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (submissionPhase !== 'IDLE') return;
     setHasSubmittedOnce(true);
@@ -158,23 +164,37 @@ const UserSignup: React.FC<UserSignupProps> = ({ onSuccess }) => {
       const finalRegId = regIdDigits.join('');
       console.log('✅ [LOG] Registration Initiated:', { ...formData, phone: finalPhone, regId: finalRegId, timestamp: new Date().toISOString() });
       setSubmissionPhase('PROCESSING');
-      setTimeout(() => {
-        setSubmissionPhase('SUCCESS');
-        console.log('✅ [LOG] User Created Successfully');
-        if (onSuccess) {
-          onSuccess({
-            username: formData.username,
-            firstName: formData.firstName,
-            middleName: formData.middleName,
-            lastName: formData.lastName,
-            college: formData.college,
-            otherCollege: formData.otherCollege,
-            phone: finalPhone,
-            regId: isAus ? finalRegId : undefined
-          });
-        }
-        setTimeout(() => setSubmissionPhase('IDLE'), 4000);
-      }, 5000);
+
+      const newUserData: UserData = {
+        username: formData.username,
+        firstName: formData.firstName,
+        middleName: formData.middleName,
+        lastName: formData.lastName,
+        college: formData.college,
+        otherCollege: formData.otherCollege,
+        phone: finalPhone,
+        ...(isAus ? { regId: finalRegId } : {}),
+        email: email,
+        photoURL: photoURL,
+        googleName: googleName
+      };
+
+      try {
+        await setDoc(doc(db, "users", uid), newUserData);
+
+        setTimeout(() => {
+          setSubmissionPhase('SUCCESS');
+          console.log('✅ [LOG] User Created Successfully');
+          if (onSuccess) {
+            onSuccess(newUserData);
+          }
+          setTimeout(() => setSubmissionPhase('IDLE'), 4000);
+        }, 2000); // Simulate a bit of loading for visual effect
+      } catch (error) {
+        console.error("Error saving user data:", error);
+        setSubmissionPhase('IDLE');
+        // Handle error appropriately (maybe shake fields or show alert)
+      }
     }
   };
 
@@ -251,8 +271,8 @@ const UserSignup: React.FC<UserSignupProps> = ({ onSuccess }) => {
                     onChange={(e) => handlePhoneDigitChange(idx, e.target.value)}
                     onKeyDown={(e) => e.key === 'Backspace' && !phoneDigits[idx] && idx > 0 && phoneRefs.current[idx - 1]?.focus()}
                     className={`w-full h-full bg-white/[0.03] border rounded-lg text-center text-white font-anton text-lg md:text-2xl outline-none transition-all duration-300
-                      ${isFocused ? 'border-fuchsia-500/50 bg-white/10 ring-0 shadow-none' : 
-                        (isBlockInError ? 'border-red-500 ring-2 ring-red-500/40 bg-red-500/5' : 
+                      ${isFocused ? 'border-fuchsia-500/50 bg-white/10 ring-0 shadow-none' :
+                        (isBlockInError ? 'border-red-500 ring-2 ring-red-500/40 bg-red-500/5' :
                           (hasValue ? 'border-fuchsia-500 shadow-[0_0_12px_rgba(217,70,239,0.4)] bg-fuchsia-500/5' : 'border-white/10'))}`}
                   />
                   {isBlockInError && <span className="absolute inset-0 flex items-center justify-center text-red-500 font-anton text-2xl pointer-events-none animate-pulse">*</span>}
@@ -310,8 +330,8 @@ const UserSignup: React.FC<UserSignupProps> = ({ onSuccess }) => {
                       onChange={(e) => handleRegIdDigitChange(idx, e.target.value)}
                       onKeyDown={(e) => e.key === 'Backspace' && !regIdDigits[idx] && idx > 0 && regIdRefs.current[idx - 1]?.focus()}
                       className={`w-full h-full bg-white/[0.03] border rounded-lg text-center text-white font-anton text-lg md:text-2xl outline-none transition-all duration-300
-                        ${isFocused ? 'border-fuchsia-500/50 bg-white/10 ring-0 shadow-none' : 
-                          (isBlockInError ? 'border-red-500 ring-2 ring-red-500/40 bg-red-500/5' : 
+                        ${isFocused ? 'border-fuchsia-500/50 bg-white/10 ring-0 shadow-none' :
+                          (isBlockInError ? 'border-red-500 ring-2 ring-red-500/40 bg-red-500/5' :
                             (hasValue ? 'border-fuchsia-500 shadow-[0_0_12px_rgba(217,70,239,0.4)] bg-fuchsia-500/5' : 'border-white/10'))}`}
                       autoComplete="off"
                     />
