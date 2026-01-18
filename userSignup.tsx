@@ -176,6 +176,7 @@ const UserSignup: React.FC<UserSignupProps> = ({ onSuccess, uid, email, photoURL
         ...(isAus ? { regId: finalRegId } : {}),
         email: email,
         photoURL: photoURL,
+        photoURLhd: photoURL.replace('s96-c', 's720'),
         googleName: googleName
       };
 

@@ -33,6 +33,7 @@ export interface UserData {
   registeredEvents?: string[]; // Track events the user has filled forms for
   email?: string;
   photoURL?: string;
+  photoURLhd?: string;
   googleName?: string;
 }
 
@@ -79,7 +80,7 @@ const ProfileCard: React.FC<{
 
           <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-fuchsia-500/5 border border-fuchsia-500/20 flex items-center justify-center mb-5 relative group overflow-hidden shadow-[0_0_35px_rgba(217,70,239,0.15)] shrink-0">
             {user.photoURL ? (
-              <img src={user.photoURL} alt="User Profile" className="w-full h-full object-cover rounded-full" />
+              <img src={user.photoURLhd || user.photoURL} alt="User Profile" className="w-full h-full object-cover rounded-full" />
             ) : (
               <svg className="w-12 h-12 md:w-14 md:h-14 text-fuchsia-500/80" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
@@ -230,7 +231,17 @@ function App() {
 
           if (userDocSnap.exists()) {
             console.log('✅ [LOG] User already exists in DB. Logging in...');
-            const userData = userDocSnap.data() as UserData;
+            let userData = userDocSnap.data() as UserData;
+
+            // Check if photoURLhd is missing and can be updated
+            if (!userData.photoURLhd && user.photoURL) {
+              const hdUrl = user.photoURL.replace('s96-c', 's720');
+              const userRef = doc(db, "users", user.uid);
+              await updateDoc(userRef, { photoURLhd: hdUrl });
+              userData = { ...userData, photoURLhd: hdUrl };
+              console.log('✅ [LOG] User photo updated to HD version.');
+            }
+
             setRegisteredUser(userData);
             setSignInPhase('IDLE');
             // Do NOT go to registration phase, just stay logged in

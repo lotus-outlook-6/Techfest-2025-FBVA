@@ -125,7 +125,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user, onSignOut, onNaviga
                   <div className="absolute inset-[-4px] border border-fuchsia-500/30 rounded-full animate-spin-slow border-dashed"></div>
                   <div className="w-full h-full bg-[#121212] rounded-full border-2 border-fuchsia-500/40 flex items-center justify-center overflow-hidden relative z-10">
                     {user.photoURL ? (
-                      <img src={user.photoURL} alt="Dashboard Profile" className="w-full h-full object-cover" />
+                      <img src={user.photoURLhd || user.photoURL} alt="Dashboard Profile" className="w-full h-full object-cover" />
                     ) : (
                       <svg className="w-16 h-16 md:w-20 md:h-20 text-fuchsia-500/70" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
