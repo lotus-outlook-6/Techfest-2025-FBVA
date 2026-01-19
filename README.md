@@ -1,20 +1,96 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# 🚀 Techfest 2025 - FBVA
 
-# Run and deploy your AI Studio app
+Welcome to the official repository for the **Techfest 2025** web platform. This application serves as the central hub for users to register, view events, manage their profiles, and participate in the fest's activities.
 
-This contains everything you need to run your app locally.
+![Techfest Banner](https://placehold.co/1200x400/1a1a1a/ffffff?text=Techfest+2025)
 
-View your app in AI Studio: https://ai.studio/apps/drive/1ftlEsM1pPjX1gaHW0kJhArljuGB28hmI
+## ✨ Features
 
-## Run Locally
+*   **User Authentication**: Secure sign-up and login powered by **Firebase Auth** (Google Sign-In).
+*   **Interactive Dashboard**: A personalized user dashboard (`UserDashboard`) to track registered events and profile status.
+*   **Event Modules**: dynamic module pages (`Modules`) allowing users to explore and register for specific tech events.
+*   **Gallery & Teams**: Dedicated sections to showcase past highlights and the organizing team.
+*   **GenAI Integration**: Powered by `@google/genai` for intelligent features.
+*   **Responsive Design**: Built for a seamless experience across desktop and mobile devices.
 
-**Prerequisites:**  Node.js
+## 🛠️ Tech Stack
 
+*   **Frontend**: [React 19](https://react.dev/) + [Vite](https://vitejs.dev/)
+*   **Language**: [TypeScript](https://www.typescriptlang.org/)
+*   **Backend / Services**: [Firebase](https://firebase.google.com/) (Auth, Firestore, Hosting)
+*   **AI**: Google GenAI SDK
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 💻 Getting Started
+
+Follow these steps to set up the project locally on your machine.
+
+### Prerequisites
+
+*   [Node.js](https://nodejs.org/) (v16 or higher)
+*   npm (comes with Node.js)
+
+### Installation
+
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/lotus-outlook-6/Techfest-2025-FBVA.git
+    cd Techfest-2025-FBVA
+    ```
+
+2.  **Install dependencies**
+    ```bash
+    npm install
+    ```
+
+3.  **Environment Setup**
+    Create a `.env.local` file in the root directory and add your API keys:
+    ```env
+    GEMINI_API_KEY=your_gemini_api_key_here
+    ```
+
+4.  **Run Locally**
+    Start the development server:
+    ```bash
+    npm run dev
+    ```
+    Open your browser and visit `http://localhost:5173` (or the URL shown in your terminal).
+
+## 🚀 Deployment
+
+This project is hosted on **Firebase Hosting**.
+
+To deploy a new version manually:
+
+1.  **Build the project**
+    ```bash
+    npm run build
+    ```
+
+2.  **Deploy to Firebase**
+    ```bash
+    npx firebase deploy
+    ```
+
+## 📂 Project Structure
+
+```bash
+Techfest-2025-FBVA/
+├── src/                # Source code (Components, logic)
+├── public/             # Static assets
+├── dist/               # Production build output
+├── firebase.ts         # Firebase configuration
+├── vite.config.ts      # Vite configuration
+└── package.json        # Project dependencies
+```
+
+## 🤝 Contributing
+
+1.  Fork the repository.
+2.  Create a new branch (`git checkout -b feature/AmazingFeature`).
+3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`).
+4.  Push to the branch (`git push origin feature/AmazingFeature`).
+5.  Open a Pull Request.
+
+---
+
+Built with ❤️ for Techfest 2025.
