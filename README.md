@@ -53,7 +53,7 @@ Follow these steps to set up the project locally on your machine.
     ```bash
     npm run dev
     ```
-    Open your browser and visit `http://localhost:5173` (or the URL shown in your terminal).
+    Open your browser and visit `http://localhost:3000` (or the URL shown in your terminal).
 
 ## 🚀 Deployment
 
