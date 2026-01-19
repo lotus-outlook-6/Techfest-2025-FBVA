@@ -2,7 +2,7 @@
 
 Welcome to the official repository for the **Techfest 2025** web platform. This application serves as the central hub for users to register, view events, manage their profiles, and participate in the fest's activities.
 
-![Techfest Banner](https://placehold.co/1200x400/1a1a1a/ffffff?text=Techfest+2025)
+![Techfest Banner](public/techfest-banner.png)
 
 ## ✨ Features
 
