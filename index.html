@@ -1,117 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YANTRAKSH</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Unbounded:wght@200..900&family=Space+Grotesk:wght@300..700&family=Anton&family=MuseoModerno:wght@100..900&display=swap" rel="stylesheet">
-    <style>
-      body {
-        margin: 0;
-        background-color: #050505;
-        font-family: 'Space Grotesk', sans-serif;
-        overflow-x: hidden;
-        overflow-y: hidden;
-        width: 100vw;
-        height: 100vh;
-      }
-      
-      .font-unbounded { font-family: 'Unbounded', sans-serif; }
-      .font-orbitron { font-family: 'Orbitron', sans-serif; }
-      .font-space { font-family: 'Space Grotesk', sans-serif; }
-      .font-anton { font-family: 'Anton', sans-serif; }
-      .font-museo { font-family: 'MuseoModerno', sans-serif; }
 
-      .neon-text {
-        color: transparent;
-        -webkit-text-stroke: 1px #ff00ff;
-        text-shadow: 0 0 10px rgba(255, 0, 255, 0.5), 0 0 20px rgba(188, 19, 254, 0.5);
-      }
-      .neon-text-filled {
-        color: #ff00ff;
-        text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
-      }
-      
-      /* Global Custom Vertical Scrollbar */
-      ::-webkit-scrollbar {
-        width: 6px;
-        height: 0px; /* Force-hide horizontal scrollbar track */
-      }
-      ::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.2);
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #d946ef;
-        border-radius: 10px;
-        box-shadow: 0 0 15px rgba(217, 70, 239, 0.6);
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #f0abfc;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YANTRAKSH</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Unbounded:wght@200..900&family=Space+Grotesk:wght@300..700&family=Anton&family=MuseoModerno:wght@100..900&display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background-color: #050505;
+      font-family: 'Space Grotesk', sans-serif;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
 
-      /* Hide horizontal scrollbar specifically */
-      * {
-        scrollbar-width: thin;
-        scrollbar-color: #d946ef transparent;
-      }
-      
-      /* Utility to ensure no horizontal scroll */
-      .no-horizontal-scroll {
-        overflow-x: hidden !important;
-      }
+    .font-unbounded {
+      font-family: 'Unbounded', sans-serif;
+    }
 
-      /* Custom Spin Animations */
-      @keyframes spin-slow {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-      }
-      @keyframes spin-reverse-slow {
-        from { transform: rotate(360deg); }
-        to { transform: rotate(0deg); }
-      }
-      
-      .animate-spin-slow {
-        animation: spin-slow 20s linear infinite;
-      }
-      .animate-spin-reverse-slow {
-        animation: spin-reverse-slow 15s linear infinite;
-      }
-      
-      @keyframes tooltip-sequence {
-        0% { opacity: 0; transform: translate(-50%, 10px) scale(0.8); }
-        10.5% { opacity: 1; transform: translate(-50%, 0) scale(1); }
-        89.5% { opacity: 1; transform: translate(-50%, 0) scale(1); }
-        100% { opacity: 0; transform: translate(-50%, -10px) scale(0.9); }
-      }
-      
-      .animate-tooltip-sequence {
-        animation: tooltip-sequence 3.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-      }
+    .font-orbitron {
+      font-family: 'Orbitron', sans-serif;
+    }
 
-      /* Entry Animations */
-      @keyframes simple-fade-in {
-        from { opacity: 0; }
-        to { opacity: 1; }
-      }
-      .animate-fade-in {
-        animation: simple-fade-in 1.5s ease-out forwards;
+    .font-space {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .font-anton {
+      font-family: 'Anton', sans-serif;
+    }
+
+    .font-museo {
+      font-family: 'MuseoModerno', sans-serif;
+    }
+
+    .neon-text {
+      color: transparent;
+      -webkit-text-stroke: 1px #ff00ff;
+      text-shadow: 0 0 10px rgba(255, 0, 255, 0.5), 0 0 20px rgba(188, 19, 254, 0.5);
+    }
+
+    .neon-text-filled {
+      color: #ff00ff;
+      text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+    }
+
+    /* Global Custom Vertical Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 0px;
+      /* Force-hide horizontal scrollbar track */
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #d946ef;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(217, 70, 239, 0.6);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #f0abfc;
+    }
+
+    /* Hide horizontal scrollbar specifically */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #d946ef transparent;
+    }
+
+    /* Utility to ensure no horizontal scroll */
+    .no-horizontal-scroll {
+      overflow-x: hidden !important;
+    }
+
+    /* Custom Spin Animations */
+    @keyframes spin-slow {
+      from {
+        transform: rotate(0deg);
       }
 
-      @keyframes line-expand {
-        from { width: 0; opacity: 0; }
-        to { width: 100%; opacity: 0.7; }
+      to {
+        transform: rotate(360deg);
       }
-      .animate-line {
-        animation: line-expand 1s ease-out forwards;
+    }
+
+    @keyframes spin-reverse-slow {
+      from {
+        transform: rotate(360deg);
       }
 
-      .heavy-blur {
-        filter: blur(12px);
+      to {
+        transform: rotate(0deg);
       }
-    </style>
+    }
+
+    .animate-spin-slow {
+      animation: spin-slow 20s linear infinite;
+    }
+
+    .animate-spin-reverse-slow {
+      animation: spin-reverse-slow 15s linear infinite;
+    }
+
+    @keyframes tooltip-sequence {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, 10px) scale(0.8);
+      }
+
+      10.5% {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(1);
+      }
+
+      89.5% {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -10px) scale(0.9);
+      }
+    }
+
+    .animate-tooltip-sequence {
+      animation: tooltip-sequence 3.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* Entry Animations */
+    @keyframes simple-fade-in {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .animate-fade-in {
+      animation: simple-fade-in 1.5s ease-out forwards;
+    }
+
+    @keyframes line-expand {
+      from {
+        width: 0;
+        opacity: 0;
+      }
+
+      to {
+        width: 100%;
+        opacity: 0.7;
+      }
+    }
+
+    .animate-line {
+      animation: line-expand 1s ease-out forwards;
+    }
+
+    .heavy-blur {
+      filter: blur(12px);
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -122,10 +185,12 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+  <link rel="stylesheet" href="/index.css">
 </head>
-  <body>
-    <div id="root"></div>
+
+<body>
+  <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>
+
 </html>
