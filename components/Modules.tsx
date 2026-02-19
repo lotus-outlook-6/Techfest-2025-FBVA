@@ -86,14 +86,14 @@ const MODULES_DATA: ModuleData[] = [
 const AIAssistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState<{role: 'user' | 'ai', content: string}[]>([]);
+  const [messages, setMessages] = useState<{ role: 'user' | 'ai', content: string }[]>([]);
   const [isThinking, setIsThinking] = useState(false);
 
   const handleAsk = async () => {
     if (!input.trim() || isThinking) return;
     const userMsg = input;
     setInput('');
-    setMessages(prev => [...prev, {role: 'user', content: userMsg}]);
+    setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
     setIsThinking(true);
 
     try {
@@ -106,9 +106,9 @@ const AIAssistant: React.FC = () => {
           systemInstruction: "You are the Yantraksh Logic Processor. Answer complex technical queries about the techfest, robotics, and coding events professionally and concisely."
         }
       });
-      setMessages(prev => [...prev, {role: 'ai', content: response.text || "I'm having trouble processing that right now."}]);
+      setMessages(prev => [...prev, { role: 'ai', content: response.text || "I'm having trouble processing that right now." }]);
     } catch (err) {
-      setMessages(prev => [...prev, {role: 'ai', content: "Connection uplink failed. Please try again later."}]);
+      setMessages(prev => [...prev, { role: 'ai', content: "Connection uplink failed. Please try again later." }]);
     } finally {
       setIsThinking(false);
     }
@@ -139,11 +139,11 @@ const AIAssistant: React.FC = () => {
             )}
           </div>
           <div className="p-4 border-t border-white/5 bg-black/40 flex gap-2">
-            <input 
-              value={input} 
+            <input
+              value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleAsk()}
-              placeholder="Ask the Logic Processor..." 
+              placeholder="Ask the Logic Processor..."
               className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-fuchsia-500/50"
             />
             <button onClick={handleAsk} className="p-2 bg-fuchsia-600 rounded-xl text-white hover:bg-fuchsia-500 transition-colors">
@@ -152,7 +152,7 @@ const AIAssistant: React.FC = () => {
           </div>
         </div>
       )}
-      <button 
+      <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-16 h-16 bg-fuchsia-600 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(217,70,239,0.5)] hover:scale-110 transition-transform group"
       >
@@ -199,7 +199,7 @@ interface ModulesProps {
 const Modules: React.FC<ModulesProps> = ({ onJoin }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLElement>(null);
-  const [activePage, setActivePage] = useState(-1); 
+  const [activePage, setActivePage] = useState(-1);
   const [isYearForward, setIsYearForward] = useState(false);
   const yearResetTimer = useRef<number | null>(null);
 
@@ -250,7 +250,7 @@ const Modules: React.FC<ModulesProps> = ({ onJoin }) => {
       setActivePage(-1);
     }
   };
-  
+
   const handlePrevPage = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (activePage >= 0) setActivePage(prev => prev - 1);
@@ -268,8 +268,8 @@ const Modules: React.FC<ModulesProps> = ({ onJoin }) => {
 
   const getContainerTranslation = () => {
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    if (isMobile) return 'translateX(0)'; 
-    
+    if (isMobile) return 'translateX(0)';
+
     if (activePage === -1) return 'translateX(-120px)';
     if (activePage === 6) return 'translateX(120px)';
     return 'translateX(0)';
@@ -365,7 +365,7 @@ const Modules: React.FC<ModulesProps> = ({ onJoin }) => {
           100% { transform: translateX(100%); }
         }
       `}</style>
-      
+
       <AIAssistant />
 
       {/* HERO SECTION */}
@@ -422,38 +422,38 @@ const Modules: React.FC<ModulesProps> = ({ onJoin }) => {
       {/* DIGITAL BOOK CONTENT SECTION */}
       <div id="module-book-content" ref={contentRef} className="min-h-screen w-full shrink-0 flex items-center justify-center bg-black perspective-[3000px] overflow-visible relative">
         <div className="absolute inset-0 bg-fuchsia-500/[0.03] blur-3xl pointer-events-none"></div>
-        
+
         <div className="book-container" style={{ transform: getContainerTranslation() }}>
           {/* SHEET 6 */}
           <div className={`book-page ${activePage >= 6 ? 'flipped' : ''}`} style={{ zIndex: activePage >= 6 ? 56 : 94, pointerEvents: (activePage === 5 || activePage === 6) ? 'auto' : 'none' }}>
             <div className="page-front bg-[#0d1b31] border-y border-r border-white/5 shadow-[-5px_0_15px_rgba(0,0,0,0.5)]">
-               <div className="page-shadow"></div>
-               <div className="w-full h-full flex flex-col items-center p-5 md:p-12 text-center relative pt-8 md:pt-16">
-                  <div className="w-12 h-12 md:w-20 md:h-20 mb-3 md:mb-6 bg-red-500/5 rounded-full p-2.5 md:p-5 flex items-center justify-center shadow-[0_0_30px_rgba(239,68,68,0.15)]">
-                     <ModuleIcon type={MODULES_DATA[5].icon} color={MODULES_DATA[5].color} className="w-full h-full" />
-                  </div>
-                  <h3 className="text-lg md:text-4xl font-anton text-white mb-1 md:mb-3 tracking-widest uppercase leading-tight">{MODULES_DATA[5].name}</h3>
-                  <p className="text-[8px] md:text-sm font-bold font-space uppercase tracking-[0.2em] mb-1 md:mb-4 text-red-400 opacity-90">{MODULES_DATA[5].tagline}</p>
-                  <p className="text-[7px] md:text-xs font-medium font-mono uppercase tracking-[0.1em] mb-2 md:mb-6 text-white opacity-40">{MODULES_DATA[5].shortDesc}</p>
-                  <p className="text-gray-300 text-[10px] md:text-base font-space max-w-[140px] md:max-w-md mb-3 md:mb-8 opacity-90 leading-relaxed overflow-hidden line-clamp-4 md:line-clamp-6">{MODULES_DATA[5].longDesc}</p>
-                  <div className="absolute bottom-12 md:bottom-12 left-1/2 -translate-x-1/2 w-full flex justify-center px-4 md:px-16">
-                     <button onClick={() => handleFillForm(MODULES_DATA[5].name)} className="w-full max-w-[100px] md:max-w-[200px] py-1.5 md:py-3.5 bg-[#0a1528]/90 border border-red-500/40 text-white font-anton tracking-[0.2em] text-[8px] md:text-sm rounded-[2rem] hover:bg-red-500 hover:border-red-500 transition-all duration-300 shadow-[0_0_20px_rgba(239,68,68,0.15)] uppercase">
-                       FILL FORM
-                     </button>
-                  </div>
-                  <button onClick={handleNextPage} className="absolute bottom-4 right-4 md:bottom-10 md:right-10 w-8 h-8 md:w-14 md:h-14 flex items-center justify-center bg-white/5 border border-white/10 rounded-full hover:bg-fuchsia-500 hover:text-white transition-all shadow-lg group">
-                    <svg className="w-4 h-4 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+              <div className="page-shadow"></div>
+              <div className="w-full h-full flex flex-col items-center p-5 md:p-12 text-center relative pt-8 md:pt-16">
+                <div className="w-12 h-12 md:w-20 md:h-20 mb-3 md:mb-6 bg-red-500/5 rounded-full p-2.5 md:p-5 flex items-center justify-center shadow-[0_0_30px_rgba(239,68,68,0.15)]">
+                  <ModuleIcon type={MODULES_DATA[5].icon} color={MODULES_DATA[5].color} className="w-full h-full" />
+                </div>
+                <h3 className="text-lg md:text-4xl font-anton text-white mb-1 md:mb-3 tracking-widest uppercase leading-tight">{MODULES_DATA[5].name}</h3>
+                <p className="text-[8px] md:text-sm font-bold font-space uppercase tracking-[0.2em] mb-1 md:mb-4 text-red-400 opacity-90">{MODULES_DATA[5].tagline}</p>
+                <p className="text-[7px] md:text-xs font-medium font-mono uppercase tracking-[0.1em] mb-2 md:mb-6 text-white opacity-40">{MODULES_DATA[5].shortDesc}</p>
+                <p className="text-gray-300 text-[10px] md:text-base font-space max-w-[140px] md:max-w-md mb-3 md:mb-8 opacity-90 leading-relaxed overflow-hidden line-clamp-4 md:line-clamp-6">{MODULES_DATA[5].longDesc}</p>
+                <div className="absolute bottom-12 md:bottom-12 left-1/2 -translate-x-1/2 w-full flex justify-center px-4 md:px-16">
+                  <button onClick={() => handleFillForm(MODULES_DATA[5].name)} className="w-full max-w-[100px] md:max-w-[200px] py-1.5 md:py-3.5 bg-[#0a1528]/90 border border-red-500/40 text-white font-anton tracking-[0.2em] text-[8px] md:text-sm rounded-[2rem] hover:bg-red-500 hover:border-red-500 transition-all duration-300 shadow-[0_0_20px_rgba(239,68,68,0.15)] uppercase">
+                    FILL FORM
                   </button>
-               </div>
+                </div>
+                <button onClick={handleNextPage} className="absolute bottom-4 right-4 md:bottom-10 md:right-10 w-8 h-8 md:w-14 md:h-14 flex items-center justify-center bg-white/5 border border-white/10 rounded-full hover:bg-fuchsia-500 hover:text-white transition-all shadow-lg group">
+                  <svg className="w-4 h-4 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
             </div>
             <div className="page-back bg-[#0a1528] border-y border-l border-white/20 shadow-[5px_0_15px_rgba(0,0,0,0.5)]">
-               <div className="w-full h-full flex flex-col items-center justify-center p-8 md:p-16 relative">
-                  <div className="flex flex-col items-center gap-4 md:gap-8 text-center">
-                     <div className="w-16 h-16 md:w-28 md:h-28 border-2 border-fuchsia-500/30 rounded-full flex items-center justify-center mb-2 shadow-[0_0_40px_rgba(217,70,239,0.2)]"><svg className="w-8 h-8 md:w-16 md:h-16 text-fuchsia-500/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2L2 7L12 12L22 7L12 2Z" /><path d="M2 17L12 22L22 17" /><path d="M2 12L17L22 12" /></svg></div>
-                     <h4 className="text-white font-anton text-xl md:text-5xl tracking-[0.2em] uppercase opacity-70 leading-none">ARCHIVE<br/>SECURED</h4>
-                  </div>
-                  <button onClick={handlePrevPage} className="absolute bottom-4 left-4 md:bottom-10 md:left-10 w-10 h-10 md:w-16 md:h-16 flex items-center justify-center bg-white/10 border border-white/20 rounded-full hover:bg-cyan-500 hover:text-white transition-all shadow-xl group"><svg className="w-5 h-5 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg></button>
-               </div>
+              <div className="w-full h-full flex flex-col items-center justify-center p-8 md:p-16 relative">
+                <div className="flex flex-col items-center gap-4 md:gap-8 text-center">
+                  <div className="w-16 h-16 md:w-28 md:h-28 border-2 border-fuchsia-500/30 rounded-full flex items-center justify-center mb-2 shadow-[0_0_40px_rgba(217,70,239,0.2)]"><svg className="w-8 h-8 md:w-16 md:h-16 text-fuchsia-500/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2L2 7L12 12L22 7L12 2Z" /><path d="M2 17L12 22L22 17" /><path d="M2 12L17L22 12" /></svg></div>
+                  <h4 className="text-white font-anton text-xl md:text-5xl tracking-[0.2em] uppercase opacity-70 leading-none">ARCHIVE<br />SECURED</h4>
+                </div>
+                <button onClick={handlePrevPage} className="absolute bottom-4 left-4 md:bottom-10 md:left-10 w-10 h-10 md:w-16 md:h-16 flex items-center justify-center bg-white/10 border border-white/20 rounded-full hover:bg-cyan-500 hover:text-white transition-all shadow-xl group"><svg className="w-5 h-5 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg></button>
+              </div>
             </div>
           </div>
 
@@ -471,24 +471,24 @@ const Modules: React.FC<ModulesProps> = ({ onJoin }) => {
                 <div className="page-front bg-[#0d1b31] border-y border-r border-white/5 shadow-[-5px_0_15px_rgba(0,0,0,0.5)]">
                   <div className="page-shadow"></div>
                   <div className="w-full h-full flex flex-col items-center p-5 md:p-12 text-center relative pt-8 md:pt-16">
-                     <div className={`w-12 h-12 md:w-20 md:h-20 mb-3 md:mb-6 bg-${module.color}-500/5 rounded-full p-2.5 md:p-5 flex items-center justify-center shadow-[0_0_30px_rgba(0,0,0,0.15)]`}><ModuleIcon type={module.icon} color={module.color} className="w-full h-full" /></div>
-                     <h3 className="text-lg md:text-4xl font-anton text-white mb-1 md:mb-3 tracking-widest uppercase shrink-0 leading-tight">{module.name}</h3>
-                     <p className="text-[8px] md:text-sm font-bold font-space uppercase tracking-[0.2em] mb-1 md:mb-4 text-fuchsia-400 opacity-90">{module.tagline}</p>
-                     <p className="text-[7px] md:text-xs font-medium font-mono uppercase tracking-[0.1em] mb-2 md:mb-6 text-white opacity-40">{module.shortDesc}</p>
-                     <p className="text-gray-300 text-[10px] md:text-base font-space max-w-[140px] md:max-w-md mb-3 md:mb-8 opacity-95 leading-relaxed overflow-hidden line-clamp-4 md:line-clamp-6">{module.longDesc}</p>
-                     <div className="absolute bottom-12 md:bottom-12 left-1/2 -translate-x-1/2 w-full flex justify-center px-4 md:px-16">
-                        <button onClick={() => handleFillForm(module.name)} className={`w-full max-w-[100px] md:max-w-[200px] py-1.5 md:py-3.5 bg-[#0a1528]/90 border border-${module.color}-500/40 text-white font-anton tracking-[0.2em] text-[8px] md:text-sm rounded-[2rem] hover:bg-fuchsia-500 hover:border-fuchsia-500 transition-all duration-300 shadow-[0_0_25px_rgba(217,70,239,0.2)] uppercase`}>
-                          FILL FORM
-                        </button>
-                     </div>
-                     <button onClick={handleNextPage} className="absolute bottom-4 right-4 md:bottom-10 md:right-10 w-8 h-8 md:w-14 md:h-14 flex items-center justify-center bg-white/5 border border-white/10 rounded-full hover:bg-fuchsia-500 hover:text-white transition-all shadow-lg group"><svg className="w-4 h-4 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg></button>
+                    <div className={`w-12 h-12 md:w-20 md:h-20 mb-3 md:mb-6 bg-${module.color}-500/5 rounded-full p-2.5 md:p-5 flex items-center justify-center shadow-[0_0_30px_rgba(0,0,0,0.15)]`}><ModuleIcon type={module.icon} color={module.color} className="w-full h-full" /></div>
+                    <h3 className="text-lg md:text-4xl font-anton text-white mb-1 md:mb-3 tracking-widest uppercase shrink-0 leading-tight">{module.name}</h3>
+                    <p className="text-[8px] md:text-sm font-bold font-space uppercase tracking-[0.2em] mb-1 md:mb-4 text-fuchsia-400 opacity-90">{module.tagline}</p>
+                    <p className="text-[7px] md:text-xs font-medium font-mono uppercase tracking-[0.1em] mb-2 md:mb-6 text-white opacity-40">{module.shortDesc}</p>
+                    <p className="text-gray-300 text-[10px] md:text-base font-space max-w-[140px] md:max-w-md mb-3 md:mb-8 opacity-95 leading-relaxed overflow-hidden line-clamp-4 md:line-clamp-6">{module.longDesc}</p>
+                    <div className="absolute bottom-12 md:bottom-12 left-1/2 -translate-x-1/2 w-full flex justify-center px-4 md:px-16">
+                      <button onClick={() => handleFillForm(module.name)} className={`w-full max-w-[100px] md:max-w-[200px] py-1.5 md:py-3.5 bg-[#0a1528]/90 border border-${module.color}-500/40 text-white font-anton tracking-[0.2em] text-[8px] md:text-sm rounded-[2rem] hover:bg-fuchsia-500 hover:border-fuchsia-500 transition-all duration-300 shadow-[0_0_25px_rgba(217,70,239,0.2)] uppercase`}>
+                        FILL FORM
+                      </button>
+                    </div>
+                    <button onClick={handleNextPage} className="absolute bottom-4 right-4 md:bottom-10 md:right-10 w-8 h-8 md:w-14 md:h-14 flex items-center justify-center bg-white/5 border border-white/10 rounded-full hover:bg-fuchsia-500 hover:text-white transition-all shadow-lg group"><svg className="w-4 h-4 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg></button>
                   </div>
                 </div>
                 <div className="page-back bg-[#0a1e3d] border-y border-l border-white/5 shadow-[5px_0_15px_rgba(0,0,0,0.5)]">
                   <div className="w-full h-full flex items-center justify-center p-4 md:p-16 relative">
                     <div className="relative w-full aspect-[4/5] md:aspect-square bg-white p-2 md:p-8 shadow-2xl transform rotate-[-3deg]">
-                       <div className="w-full h-[85%] bg-gray-200 overflow-hidden mb-2 md:mb-6"><img src={nextModule.imageUrl} className="w-full h-full object-cover grayscale-[0.2]" alt="Module Visual" /></div>
-                       <div className="font-space text-black text-[8px] md:text-base font-bold text-center opacity-70 uppercase tracking-widest leading-none">{nextModule.name}</div>
+                      <div className="w-full h-[85%] bg-gray-200 overflow-hidden mb-2 md:mb-6"><img src={nextModule.imageUrl} className="w-full h-full object-cover grayscale-[0.2]" alt="Module Visual" /></div>
+                      <div className="font-space text-black text-[8px] md:text-base font-bold text-center opacity-70 uppercase tracking-widest leading-none">{nextModule.name}</div>
                     </div>
                     <button onClick={handlePrevPage} className="absolute bottom-4 left-4 md:bottom-10 md:left-10 w-10 h-10 md:w-16 md:h-16 flex items-center justify-center bg-white/10 border border-white/20 rounded-full hover:bg-cyan-500 hover:text-white transition-all shadow-xl group"><svg className="w-5 h-5 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg></button>
                   </div>
@@ -502,17 +502,17 @@ const Modules: React.FC<ModulesProps> = ({ onJoin }) => {
             <div onClick={handleOpenBook} className="page-front bg-gradient-to-br from-[#1a3a6c] to-[#0a1528] flex flex-col items-center justify-center border-y border-r border-white/20 cursor-pointer group shadow-[10px_0_30px_rgba(0,0,0,0.5)]">
               <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
               <div className="relative z-10 flex flex-col items-center gap-4 md:gap-10 text-center">
-                  <div className="w-12 h-12 md:w-28 md:h-28 border-2 border-fuchsia-500/50 rounded-full flex items-center justify-center mb-2 shadow-[0_0_40px_rgba(217,70,239,0.3)] animate-pulse"><svg className="w-6 h-6 md:w-16 md:h-16 text-fuchsia-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2L2 7L12 12L22 7L12 2Z" /><path d="M2 17L12 22L22 17" /><path d="M2 12L17L22 12" /></svg></div>
-                  <h2 className="text-white font-anton text-xl md:text-5xl tracking-[0.2em] px-4 md:px-8 leading-tight uppercase">TECHNICAL<br/><span className="text-fuchsia-500 drop-shadow-[0_0_15px_rgba(217,70,239,0.6)]">MODULES</span></h2>
-                  <div className="h-px w-10 md:w-24 bg-white/20 my-2 md:my-3"></div>
-                  <p className="text-fuchsia-400 font-mono text-[7px] md:text-sm tracking-[0.4em] uppercase opacity-70 group-hover:opacity-100 transition-opacity">CLICK TO VIEW</p>
+                <div className="w-12 h-12 md:w-28 md:h-28 border-2 border-fuchsia-500/50 rounded-full flex items-center justify-center mb-2 shadow-[0_0_40px_rgba(217,70,239,0.3)] animate-pulse"><svg className="w-6 h-6 md:w-16 md:h-16 text-fuchsia-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2L2 7L12 12L22 7L12 2Z" /><path d="M2 17L12 22L22 17" /><path d="M2 12L17L22 12" /></svg></div>
+                <h2 className="text-white font-anton text-xl md:text-5xl tracking-[0.2em] px-4 md:px-8 leading-tight uppercase">TECHNICAL<br /><span className="text-fuchsia-500 drop-shadow-[0_0_15px_rgba(217,70,239,0.6)]">MODULES</span></h2>
+                <div className="h-px w-10 md:w-24 bg-white/20 my-2 md:my-3"></div>
+                <p className="text-fuchsia-400 font-mono text-[7px] md:text-sm tracking-[0.4em] uppercase opacity-70 group-hover:opacity-100 transition-opacity">CLICK TO VIEW</p>
               </div>
             </div>
             <div className="page-back bg-[#0a1e3d] border-y border-l border-white/5 shadow-[5px_0_15px_rgba(0,0,0,0.5)]">
               <div className="w-full h-full flex items-center justify-center p-4 md:p-16 relative">
                 <div className="relative w-full aspect-[4/5] md:aspect-square bg-white p-2 md:p-8 shadow-2xl transform rotate-[2deg]">
-                   <div className="w-full h-[85%] bg-gray-200 overflow-hidden mb-2 md:mb-6"><img src={MODULES_DATA[0].imageUrl} className="w-full h-full object-cover grayscale-[0.2]" alt="Module 1 Visual" /></div>
-                   <div className="font-space text-black text-[8px] md:text-base font-bold text-center opacity-70 uppercase tracking-widest leading-none">{MODULES_DATA[0].name}</div>
+                  <div className="w-full h-[85%] bg-gray-200 overflow-hidden mb-2 md:mb-6"><img src={MODULES_DATA[0].imageUrl} className="w-full h-full object-cover grayscale-[0.2]" alt="Module 1 Visual" /></div>
+                  <div className="font-space text-black text-[8px] md:text-base font-bold text-center opacity-70 uppercase tracking-widest leading-none">{MODULES_DATA[0].name}</div>
                 </div>
                 <button onClick={handlePrevPage} className="absolute bottom-4 left-4 md:bottom-10 md:left-10 w-10 h-10 md:w-16 md:h-16 flex items-center justify-center bg-white/10 border border-white/20 rounded-full hover:bg-cyan-500 hover:text-white transition-all shadow-xl group"><svg className="w-5 h-5 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg></button>
               </div>
@@ -532,12 +532,12 @@ const Modules: React.FC<ModulesProps> = ({ onJoin }) => {
 
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-10 w-full mb-12">
           {MODULES_DATA.map((module, idx) => (
-            <div 
-              key={module.id} 
+            <div
+              key={module.id}
               className={`group relative bg-[#0c0c0c]/60 backdrop-blur-3xl border border-white/10 rounded-2xl md:rounded-[2.5rem] p-4 md:p-8 transition-all duration-700 flex flex-col items-center overflow-hidden hover:border-white/30 card-glow-${module.color}`}
             >
               <div className={`absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-${module.color}-500/10 blur-[40px] md:blur-[60px] rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-${module.color}-500/20 transition-all duration-700`}></div>
-              
+
               <div className={`relative mb-4 md:mb-8 p-4 md:p-6 bg-white/5 rounded-2xl md:rounded-3xl group-hover:bg-white/10 transition-all duration-500`}>
                 <ModuleIcon type={module.icon} color={module.color} className="w-8 h-8 md:w-12 md:h-12" />
               </div>
@@ -550,7 +550,7 @@ const Modules: React.FC<ModulesProps> = ({ onJoin }) => {
                 {module.tagline}
               </p>
 
-              <button 
+              <button
                 onClick={() => handleViewModuleDetails(idx)}
                 className={`w-full py-2 md:py-4 bg-[#0a1528]/80 border border-white/10 text-white font-orbitron tracking-[0.2em] md:tracking-[0.3em] text-[8px] md:text-[11px] font-bold rounded-xl md:rounded-2xl hover:bg-white hover:text-black transition-all duration-500 uppercase shadow-lg group-hover:shadow-${module.color}-500/20 group-hover:scale-[1.02]`}
               >
@@ -562,7 +562,7 @@ const Modules: React.FC<ModulesProps> = ({ onJoin }) => {
 
         {/* NEW GLOBAL FILL FORM BUTTON */}
         <div className="mt-4 flex flex-col items-center gap-6">
-          <button 
+          <button
             onClick={() => handleFillForm("GLOBAL_REGISTRATION")}
             className="group relative px-12 md:px-16 py-4 md:py-5 bg-fuchsia-600 rounded-2xl text-white font-anton text-xl md:text-3xl tracking-[0.2em] uppercase transition-all duration-300 hover:scale-105 hover:bg-fuchsia-500 hover:shadow-[0_0_60px_rgba(217,70,239,0.5)] active:scale-95 overflow-hidden"
           >
@@ -583,6 +583,17 @@ const Modules: React.FC<ModulesProps> = ({ onJoin }) => {
             <span className="text-[12vw] md:text-[10rem] font-anton tracking-[0.05em] leading-none inline-block scale-x-[1.3] scale-y-[1.8] transform origin-center">2026</span>
           </div>
           <h2 onMouseEnter={handleYearTrigger} className="relative z-10 text-[22vw] md:text-[23vw] font-anton text-white leading-none tracking-[-0.04em] drop-shadow-[0_10px_80px_rgba(0,0,0,0.8)] transition-all duration-1000 hover:scale-[1.03] cursor-default px-6 md:px-12 w-full text-center -translate-y-10 md:-translate-y-20">YANTRAKSH</h2>
+          <div className="absolute bottom-4 left-0 right-0 flex flex-col items-center gap-4">
+            <span className="text-white text-xs md:text-lg font-anton tracking-[0.4em] uppercase opacity-90 drop-shadow-lg">OUR SOCIAL HANDLES</span>
+            <div className="flex flex-wrap justify-center gap-5 md:gap-8 items-center">
+              <a href="https://www.instagram.com/yantraksh.tssot/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-fuchsia-500 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849s-.011 3.585-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.849-.07c-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849s.012-3.584.07-4.849c.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.058-1.28.072-1.689.072-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.28-.058-1.689-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" /></svg></a>
+              <a href="https://www.facebook.com/profile.php?id=61586670172969" target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue-500 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.5-10 10.04 0 5 3.66 9.14 8.44 9.88v-6.99h-2.54v-2.89h2.54v-2.2c0-2.5 1.52-3.89 3.77-3.89 1.08 0 2.2.19 2.2.19v2.43h-1.24c-1.24 0-1.63.77-1.63 1.56v1.91h2.74l-.44 2.89h-2.3v6.99c4.78-.74 8.44-4.88 8.44-9.88 0-5.54-4.5-10.04-10-10.04z" /></svg></a>
+              <a href="https://x.com/yantrakshTSSOT" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-400 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg></a>
+              <a href="https://www.linkedin.com/in/yantraksh26/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue-600 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg></a>
+              <a href="mailto:yantraksh2026@gmail.com" className="text-white hover:text-fuchsia-500 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" /></svg></a>
+            </div>
+            <p className="text-gray-500 text-[8px] md:text-[9px] uppercase tracking-[0.3em] font-space opacity-50">made in collaboration of Lotus_Proton_6 & REET</p>
+          </div>
         </div>
       </section>
 

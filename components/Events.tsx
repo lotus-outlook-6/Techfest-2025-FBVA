@@ -101,7 +101,7 @@ const Events: React.FC = () => {
   const timerRef = useRef<number | null>(null);
   const megaSectionRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLElement>(null);
-  
+
   const [isYearForward, setIsYearForward] = useState(false);
   const yearResetTimer = useRef<number | null>(null);
 
@@ -197,58 +197,58 @@ const Events: React.FC = () => {
         </div>
 
         <div className="w-full max-w-7xl flex flex-col items-center overflow-visible">
-            <div className="relative w-full h-[48vh] md:h-[42vh] flex items-center justify-center perspective-box mb-12 overflow-visible">
-              <div className="relative w-full h-full flex items-center justify-center gap-0 overflow-visible max-w-[100vw]">
-                {CORE_EVENTS.map((event, idx) => {
-                  const isActive = activeIndex === idx;
-                  const isMobile = window.innerWidth < 768;
-                  const isTablet = window.innerWidth < 1024;
-                  
-                  let rotateY = 0, translateZ = 0, translateX = 0, scale = 1, opacity = 1;
-                  const activeWidthMobile = 290;
-                  const activeWidthTablet = 480;
-                  const activeWidthDesktop = 650;
-                  
-                  if (isActive) {
-                    translateZ = isMobile ? 120 : 180;
-                    opacity = 1;
-                    scale = 0.98;
-                  } else {
-                    const offset = idx - activeIndex;
-                    const halfWidth = isMobile ? activeWidthMobile / 2 : (isTablet ? activeWidthTablet / 2 : activeWidthDesktop / 2);
-                    const initialGap = isMobile ? 35 : 85; 
-                    const baseOffset = halfWidth + initialGap;
-                    translateX = (offset < 0 ? -baseOffset : baseOffset) + (offset * (isMobile ? 25 : 110));
-                    rotateY = (offset < 0 ? (isMobile ? 45 : 35) : (isMobile ? -45 : -35));
-                    translateZ = isMobile ? -120 : -180;
-                    opacity = isMobile ? 0.6 : 1; 
-                  }
-                  
-                  return (
-                    <div
-                      key={event.id}
-                      onClick={() => handlePanelClick(idx)}
-                      className={`blade-transition absolute h-full cursor-pointer rounded-2xl border border-white/5 overflow-hidden bg-black/50 backdrop-blur-xl pointer-events-auto ${isActive ? `animate-panel-glow w-[290px] md:w-[480px] lg:w-[650px] z-50` : 'w-12 md:w-16 lg:w-24 z-10'}`}
-                      style={{ transform: `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`, opacity }}
-                    >
-                      <img src={event.img} className={`absolute inset-0 w-full h-full object-cover transition-all duration-[2s] ${isActive ? 'grayscale-0 scale-100 opacity-100' : 'opacity-40 hover:opacity-100 grayscale-0'}`} alt={event.title} />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-95"></div>
-                      
-                      <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-[-90deg] whitespace-nowrap transition-all duration-500 ${isActive ? 'opacity-0 scale-50' : 'opacity-100'}`}>
-                        <span className="text-[14px] md:text-xl font-anton tracking-[0.2em] text-white/60 uppercase">{event.category}</span>
-                      </div>
+          <div className="relative w-full h-[48vh] md:h-[42vh] flex items-center justify-center perspective-box mb-12 overflow-visible">
+            <div className="relative w-full h-full flex items-center justify-center gap-0 overflow-visible max-w-[100vw]">
+              {CORE_EVENTS.map((event, idx) => {
+                const isActive = activeIndex === idx;
+                const isMobile = window.innerWidth < 768;
+                const isTablet = window.innerWidth < 1024;
 
-                      <div className={`absolute bottom-0 left-0 w-full p-8 md:p-10 transition-all duration-1000 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                        <h3 className="text-3xl md:text-4xl font-anton text-white uppercase leading-none mb-3 tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">{event.title}</h3>
-                        <p className="text-gray-300 text-xs md:text-sm font-space max-w-md opacity-90 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
-                          {event.desc}
-                        </p>
-                      </div>
+                let rotateY = 0, translateZ = 0, translateX = 0, scale = 1, opacity = 1;
+                const activeWidthMobile = 290;
+                const activeWidthTablet = 480;
+                const activeWidthDesktop = 650;
+
+                if (isActive) {
+                  translateZ = isMobile ? 120 : 180;
+                  opacity = 1;
+                  scale = 0.98;
+                } else {
+                  const offset = idx - activeIndex;
+                  const halfWidth = isMobile ? activeWidthMobile / 2 : (isTablet ? activeWidthTablet / 2 : activeWidthDesktop / 2);
+                  const initialGap = isMobile ? 35 : 85;
+                  const baseOffset = halfWidth + initialGap;
+                  translateX = (offset < 0 ? -baseOffset : baseOffset) + (offset * (isMobile ? 25 : 110));
+                  rotateY = (offset < 0 ? (isMobile ? 45 : 35) : (isMobile ? -45 : -35));
+                  translateZ = isMobile ? -120 : -180;
+                  opacity = isMobile ? 0.6 : 1;
+                }
+
+                return (
+                  <div
+                    key={event.id}
+                    onClick={() => handlePanelClick(idx)}
+                    className={`blade-transition absolute h-full cursor-pointer rounded-2xl border border-white/5 overflow-hidden bg-black/50 backdrop-blur-xl pointer-events-auto ${isActive ? `animate-panel-glow w-[290px] md:w-[480px] lg:w-[650px] z-50` : 'w-12 md:w-16 lg:w-24 z-10'}`}
+                    style={{ transform: `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`, opacity }}
+                  >
+                    <img src={event.img} className={`absolute inset-0 w-full h-full object-cover transition-all duration-[2s] ${isActive ? 'grayscale-0 scale-100 opacity-100' : 'opacity-40 hover:opacity-100 grayscale-0'}`} alt={event.title} />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-95"></div>
+
+                    <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-[-90deg] whitespace-nowrap transition-all duration-500 ${isActive ? 'opacity-0 scale-50' : 'opacity-100'}`}>
+                      <span className="text-[14px] md:text-xl font-anton tracking-[0.2em] text-white/60 uppercase">{event.category}</span>
                     </div>
-                  );
-                })}
-              </div>
+
+                    <div className={`absolute bottom-0 left-0 w-full p-8 md:p-10 transition-all duration-1000 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                      <h3 className="text-3xl md:text-4xl font-anton text-white uppercase leading-none mb-3 tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">{event.title}</h3>
+                      <p className="text-gray-300 text-xs md:text-sm font-space max-w-md opacity-90 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                        {event.desc}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
+          </div>
         </div>
         <div className="mt-4 mb-12 animate-bounce opacity-40 cursor-pointer z-20 hover:opacity-100 transition-opacity" onClick={() => megaSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}>
           <svg className="w-10 h-10 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
@@ -269,23 +269,23 @@ const Events: React.FC = () => {
                 <img src={event.img} className="absolute inset-0 w-full h-full object-cover transition-all duration-[1s] group-hover:scale-110 grayscale-0 group-hover:grayscale-[0.4] opacity-100 group-hover:opacity-30" alt={event.title} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none px-4">
-                    <div className={`logo-hover-reveal text-center leading-none tracking-tighter uppercase
-                        ${event.id === 'H_01' ? 'font-anton text-[7.5rem] drop-shadow-[0_0_50px_rgba(220,38,38,0.7)]' : 
-                          event.id === 'H_02' ? 'font-anton text-[5rem] md:text-[5.5rem] drop-shadow-[0_0_50px_rgba(168,85,247,0.7)]' : 
-                          'font-museo lowercase text-[4.5rem] md:text-[5.5rem] drop-shadow-[0_0_50px_rgba(236,72,153,0.7)]'}
+                  <div className={`logo-hover-reveal text-center leading-none tracking-tighter uppercase
+                        ${event.id === 'H_01' ? 'font-anton text-[7.5rem] drop-shadow-[0_0_50px_rgba(220,38,38,0.7)]' :
+                      event.id === 'H_02' ? 'font-anton text-[5rem] md:text-[5.5rem] drop-shadow-[0_0_50px_rgba(168,85,247,0.7)]' :
+                        'font-museo lowercase text-[4.5rem] md:text-[5.5rem] drop-shadow-[0_0_50px_rgba(236,72,153,0.7)]'}
                     `}>
-                        {event.id === 'H_01' ? (
-                          <><span className="text-white">SOT</span>{' '}<span className="text-red-600">X</span></>
-                        ) : event.id === 'H_02' ? (
-                          <><span className="text-white">{event.hoverTextPrefix}</span>{' '}<span className="text-purple-500">{event.hoverTextSuffix}</span></>
-                        ) : (
-                          <><span className="text-white">{event.hoverTextPrefix}</span><span className="text-pink-500">{event.hoverTextSuffix}</span></>
-                        )}
-                    </div>
+                    {event.id === 'H_01' ? (
+                      <><span className="text-white">SOT</span>{' '}<span className="text-red-600">X</span></>
+                    ) : event.id === 'H_02' ? (
+                      <><span className="text-white">{event.hoverTextPrefix}</span>{' '}<span className="text-purple-500">{event.hoverTextSuffix}</span></>
+                    ) : (
+                      <><span className="text-white">{event.hoverTextPrefix}</span><span className="text-pink-500">{event.hoverTextSuffix}</span></>
+                    )}
+                  </div>
                 </div>
                 <div className="absolute inset-0 p-10 flex flex-col justify-end">
-                   <div className="mb-4"><h4 className="text-3xl md:text-4xl font-anton text-white uppercase leading-none transition-colors tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">{event.title}</h4></div>
-                   <p className="text-gray-200 text-xs font-space leading-relaxed opacity-100 transition-all duration-700 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">{event.desc}</p>
+                  <div className="mb-4"><h4 className="text-3xl md:text-4xl font-anton text-white uppercase leading-none transition-colors tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">{event.title}</h4></div>
+                  <p className="text-gray-200 text-xs font-space leading-relaxed opacity-100 transition-all duration-700 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">{event.desc}</p>
                 </div>
               </div>
             ))}
@@ -293,45 +293,45 @@ const Events: React.FC = () => {
 
           {/* PERFECTED JOIN WHATSAPP CARD - Brand color #25D366 applied */}
           <div className="mt-20 py-10 px-8 md:px-14 w-full rounded-[2.5rem] md:rounded-[3.5rem] bg-[#0a0a0a] border border-[#25D366]/10 flex flex-col lg:flex-row items-center justify-start gap-12 lg:gap-0 backdrop-blur-3xl relative overflow-hidden group/whatsapp transition-all duration-700 hover:border-[#25D366]/30 hover:shadow-[0_0_100px_rgba(37,211,102,0.15)]">
-             <div className="absolute inset-0 bg-[#25D366]/[0.01] pointer-events-none transition-opacity duration-700 group-hover/whatsapp:opacity-100 group-hover/whatsapp:bg-[#25D366]/[0.04]"></div>
-             
-             {/* Text Content Area */}
-             <div className="flex-1 relative z-10 flex flex-col items-center lg:items-start text-center lg:text-left min-w-0">
-                <h5 className="text-2xl md:text-5xl font-anton text-white uppercase mb-3 tracking-tight group-hover/whatsapp:text-[#25D366] transition-all duration-500 whitespace-nowrap">JOIN US ON WHATSAPP</h5>
-                <p className="text-gray-400 text-[13px] md:text-base font-space opacity-80 leading-relaxed max-w-2xl lg:pr-2">
-                  Stay updated with real-time announcements, immediate schedule changes, and exclusive behind-the-scenes insights directly from the core organizing team to ensure you stay ahead and never miss a single beat throughout the entire festival.
-                </p>
-             </div>
-             
-             {/* Flip QR Card Area */}
-             <div className="relative z-10 flex-shrink-0 flip-card w-28 h-28 md:w-36 md:h-36 group/flip lg:-ml-12 lg:mr-8 mb-2 lg:mb-0">
-                <div className="flip-card-inner w-full h-full transition-transform duration-700">
-                  <div className="flip-card-front bg-white p-2.5 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.3)] border border-[#25D366]/20">
-                    <img 
-                      src="https://scontent.whatsapp.net/v/t39.8562-34/495571915_2950553458455166_4924198993047220200_n.png?ccb=1-7&_nc_sid=73b08c&_nc_ohc=QUUYb6od1OYQ7kNvwGNYasz&_nc_oc=AdmwhxqofV6uarCMBhv2r7uVPmlf2RtPVCfptdTQDLw0BiinFlCjfRcmik5u4kU1DiA&_nc_zt=3&_nc_ht=scontent.whatsapp.net&_nc_gid=KS9NeKqDg9_M0sWRG9iwHA&oh=01_Q5Aa3gEova_YKUX7HlK7B2zqQho9C8Gy0ghah8ZGChbI8CWKJA&oe=696D12CD" 
-                      alt="WhatsApp QR Code" 
-                      className="w-full h-full object-contain" 
-                    />
-                  </div>
-                  <div className="flip-card-back bg-[#25D366] rounded-xl flex items-center justify-center shadow-[0_10px_30px_rgba(37,211,102,0.3)]">
-                    <WhatsAppIcon className="w-16 h-16 md:w-20 md:h-20 text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]" />
-                  </div>
-                </div>
-             </div>
+            <div className="absolute inset-0 bg-[#25D366]/[0.01] pointer-events-none transition-opacity duration-700 group-hover/whatsapp:opacity-100 group-hover/whatsapp:bg-[#25D366]/[0.04]"></div>
 
-             {/* Join Community Button Area - Updated background to #25D366 */}
-             <div className="relative z-10 flex-shrink-0 flex items-center justify-center lg:ml-auto">
-                <a 
-                  href="https://whatsapp.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="inline-flex items-center gap-3 px-6 py-3.5 md:px-10 md:py-4.5 bg-[#25D366] rounded-xl text-white font-anton text-base md:text-xl tracking-[0.1em] hover:bg-[#34e073] transition-all hover:scale-105 active:scale-95 hover:shadow-[0_0_50px_rgba(37,211,102,0.8),0_0_20px_rgba(37,211,102,1)] group/btn relative overflow-hidden"
-                >
-                  <span className="relative z-10 uppercase">JOIN COMMUNITY</span>
-                  <WhatsAppIcon className="w-5 h-5 md:w-7 md:h-7 relative z-10 transition-transform group-hover/btn:rotate-12 group-hover/btn:scale-110" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_1.5s_infinite]"></div>
-                </a>
-             </div>
+            {/* Text Content Area */}
+            <div className="flex-1 relative z-10 flex flex-col items-center lg:items-start text-center lg:text-left min-w-0">
+              <h5 className="text-2xl md:text-5xl font-anton text-white uppercase mb-3 tracking-tight group-hover/whatsapp:text-[#25D366] transition-all duration-500 whitespace-nowrap">JOIN US ON WHATSAPP</h5>
+              <p className="text-gray-400 text-[13px] md:text-base font-space opacity-80 leading-relaxed max-w-2xl lg:pr-2">
+                Stay updated with real-time announcements, immediate schedule changes, and exclusive behind-the-scenes insights directly from the core organizing team to ensure you stay ahead and never miss a single beat throughout the entire festival.
+              </p>
+            </div>
+
+            {/* Flip QR Card Area */}
+            <div className="relative z-10 flex-shrink-0 flip-card w-28 h-28 md:w-36 md:h-36 group/flip lg:-ml-12 lg:mr-8 mb-2 lg:mb-0">
+              <div className="flip-card-inner w-full h-full transition-transform duration-700">
+                <div className="flip-card-front bg-white p-2.5 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.3)] border border-[#25D366]/20">
+                  <img
+                    src="/hovercode.png"
+                    alt="WhatsApp QR Code"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <div className="flip-card-back bg-[#25D366] rounded-xl flex items-center justify-center shadow-[0_10px_30px_rgba(37,211,102,0.3)]">
+                  <WhatsAppIcon className="w-16 h-16 md:w-20 md:h-20 text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]" />
+                </div>
+              </div>
+            </div>
+
+            {/* Join Community Button Area - Updated background to #25D366 */}
+            <div className="relative z-10 flex-shrink-0 flex items-center justify-center lg:ml-auto">
+              <a
+                href="https://whatsapp.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 px-6 py-3.5 md:px-10 md:py-4.5 bg-[#25D366] rounded-xl text-white font-anton text-base md:text-xl tracking-[0.1em] hover:bg-[#34e073] transition-all hover:scale-105 active:scale-95 hover:shadow-[0_0_50px_rgba(37,211,102,0.8),0_0_20px_rgba(37,211,102,1)] group/btn relative overflow-hidden"
+              >
+                <span className="relative z-10 uppercase">JOIN COMMUNITY</span>
+                <WhatsAppIcon className="w-5 h-5 md:w-7 md:h-7 relative z-10 transition-transform group-hover/btn:rotate-12 group-hover/btn:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_1.5s_infinite]"></div>
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -356,11 +356,11 @@ const Events: React.FC = () => {
           <div className="absolute bottom-4 left-0 right-0 flex flex-col items-center gap-4">
             <span className="text-white text-xs md:text-lg font-anton tracking-[0.4em] uppercase opacity-90 drop-shadow-lg">OUR SOCIAL HANDLES</span>
             <div className="flex flex-wrap justify-center gap-5 md:gap-8 items-center">
-              <a href="https://www.instagram.com/_yantraksh_" target="_blank" rel="noopener noreferrer" className="text-white hover:text-fuchsia-500 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849s-.011 3.585-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.849-.07c-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849s.012-3.584.07-4.849c.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.058-1.28.072-1.689.072-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.28-.058-1.689-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-              <a href="https://www.facebook.com/share/17egUW6dfC/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue-500 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.5-10 10.04 0 5 3.66 9.14 8.44 9.88v-6.99h-2.54v-2.89h2.54v-2.2c0-2.5 1.52-3.89 3.77-3.89 1.08 0 2.2.19 2.2.19v2.43h-1.24c-1.24 0-1.63.77-1.63 1.56v1.91h2.74l-.44 2.89h-2.3v6.99c4.78-.74 8.44-4.88 8.44-9.88 0-5.54-4.5-10.04-10-10.04z"/></svg></a>
-              <a href="https://x.com/_Yantraksh_" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-400 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-              <a href="https://www.linkedin.com/in/yantraksh" target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue-600 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
-              <a href="mailto:yantraksh2026@gmail.com" className="text-white hover:text-fuchsia-500 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+              <a href="https://www.instagram.com/yantraksh.tssot/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-fuchsia-500 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849s-.011 3.585-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.849-.07c-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849s.012-3.584.07-4.849c.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.058-1.28.072-1.689.072-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.28-.058-1.689-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" /></svg></a>
+              <a href="https://www.facebook.com/profile.php?id=61586670172969" target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue-500 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.5-10 10.04 0 5 3.66 9.14 8.44 9.88v-6.99h-2.54v-2.89h2.54v-2.2c0-2.5 1.52-3.89 3.77-3.89 1.08 0 2.2.19 2.2.19v2.43h-1.24c-1.24 0-1.63.77-1.63 1.56v1.91h2.74l-.44 2.89h-2.3v6.99c4.78-.74 8.44-4.88 8.44-9.88 0-5.54-4.5-10.04-10-10.04z" /></svg></a>
+              <a href="https://x.com/yantrakshTSSOT" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-400 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg></a>
+              <a href="https://www.linkedin.com/in/yantraksh26/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue-600 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg></a>
+              <a href="mailto:yantraksh2026@gmail.com" className="text-white hover:text-fuchsia-500 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" /></svg></a>
             </div>
             <p className="text-gray-500 text-[8px] md:text-[9px] uppercase tracking-[0.3em] font-space opacity-50">made in collaboration of Lotus_Proton_6 & REET</p>
           </div>

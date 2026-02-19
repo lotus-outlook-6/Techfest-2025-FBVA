@@ -10,16 +10,16 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ onPlayChange, hideButton = fa
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(() => {
     const saved = localStorage.getItem('musicVolume');
-    return saved !== null ? parseFloat(saved) : 0.6;
+    return saved !== null ? parseFloat(saved) : 0.9;
   });
-  
+
   const [isHovered, setIsHovered] = useState(false);
   const [isExtended, setIsExtended] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
-  
+
   const hoverTimerRef = useRef<number | null>(null);
   const changingTimerRef = useRef<number | null>(null);
-  
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fadeIntervalRef = useRef<number | null>(null);
 
@@ -28,11 +28,11 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ onPlayChange, hideButton = fa
       audioRef.current.loop = true;
       audioRef.current.volume = volume;
     }
-    
+
     return () => {
-        if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
-        if (hoverTimerRef.current) window.clearTimeout(hoverTimerRef.current);
-        if (changingTimerRef.current) window.clearTimeout(changingTimerRef.current);
+      if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+      if (hoverTimerRef.current) window.clearTimeout(hoverTimerRef.current);
+      if (changingTimerRef.current) window.clearTimeout(changingTimerRef.current);
     };
   }, []);
 
@@ -47,7 +47,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ onPlayChange, hideButton = fa
     if (changingTimerRef.current) window.clearTimeout(changingTimerRef.current);
     changingTimerRef.current = window.setTimeout(() => {
       setIsChanging(false);
-    }, 1500); 
+    }, 1500);
   }, [volume]);
 
   const handleMouseEnter = () => {
@@ -70,31 +70,31 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ onPlayChange, hideButton = fa
   const togglePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!audioRef.current) return;
-    
+
     if (fadeIntervalRef.current) {
-        clearInterval(fadeIntervalRef.current);
-        fadeIntervalRef.current = null;
+      clearInterval(fadeIntervalRef.current);
+      fadeIntervalRef.current = null;
     }
 
     if (isPlaying) {
       setIsPlaying(false);
       if (onPlayChange) onPlayChange(false);
-      
+
       const startVol = audioRef.current.volume;
       const steps = 15;
       const stepValue = startVol / steps;
-      
+
       fadeIntervalRef.current = window.setInterval(() => {
-          if (audioRef.current && audioRef.current.volume > stepValue) {
-              audioRef.current.volume -= stepValue;
-          } else {
-              if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
-              fadeIntervalRef.current = null;
-              if (audioRef.current) {
-                  audioRef.current.pause();
-                  audioRef.current.volume = volume;
-              }
+        if (audioRef.current && audioRef.current.volume > stepValue) {
+          audioRef.current.volume -= stepValue;
+        } else {
+          if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+          fadeIntervalRef.current = null;
+          if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.volume = volume;
           }
+        }
       }, 100);
     } else {
       audioRef.current.volume = volume;
@@ -111,31 +111,61 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ onPlayChange, hideButton = fa
     setVolume(parseFloat(e.target.value));
   };
 
+  // Main BGM
+  const MAIN_BGM = "/Music/main/DAILY_No_Copyright_For_You_–_Can't_Stop_by_Next_Route_🎵_320k.mp3";
+
+  // Side BGMs
+  const SIDE_BGMS = [
+    "/Music/side_bgms/Next_Route_-_Cherry_[Official]_320k.mp3",
+    "/Music/side_bgms/Next_Route_-_Dragon_[Official]_320k.mp3",
+    "/Music/side_bgms/Phonk_Racing_by_Infraction,_Alexi_Action,_Dedpled_[No_Copyright_Music]_Pick_Me_320k.mp3",
+    "/Music/side_bgms/Technology_Stylish_Finance_by_Infraction_[No_Copyright_Music]_Novation_320k.mp3"
+  ];
+
+  useEffect(() => {
+    // 1 in 3 chance (approx 33%) to play a side BGM
+    const shouldPlaySideBgm = Math.random() < 0.33;
+
+    let selectedBgm = MAIN_BGM;
+
+    if (shouldPlaySideBgm) {
+      const randomIndex = Math.floor(Math.random() * SIDE_BGMS.length);
+      selectedBgm = SIDE_BGMS[randomIndex];
+    }
+
+    if (audioRef.current) {
+      audioRef.current.src = selectedBgm;
+    }
+
+    console.log(`[MusicPlayer] Selected BGM: ${selectedBgm}`);
+  }, []);
+
   return (
     <>
+      {/* Hidden Audio Element */}
       <audio
         ref={audioRef}
         loop={true}
-        src="https://cdn.pixabay.com/audio/2026/01/05/audio_9a71f663aa.mp3"
+      // src is set via useEffect
       />
-      
+
       {/* UI Controls - Completely hidden and unclickable when hideButton is true */}
-      <div 
+      <div
         className={`
           fixed top-8 right-8 z-[300] pointer-events-auto flex flex-col items-center
           bg-[#0c0c0c] border border-fuchsia-500/30 overflow-hidden
           transition-all duration-[1000ms] ease-[cubic-bezier(0.19,1,0.22,1)]
           shadow-[0_0_25px_rgba(217,70,239,0.2)]
-          ${hideButton ? 'hidden opacity-0 pointer-events-none' : 'flex opacity-100 pointer-events-auto'}
-          ${isExtended 
-            ? 'w-72 h-40 rounded-[2.5rem] border-fuchsia-500/50' 
+          ${hideButton ? 'opacity-0 pointer-events-none translate-y-[-20px]' : 'opacity-100 pointer-events-auto translate-y-0'}
+          ${isExtended
+            ? 'w-72 h-40 rounded-[2.5rem] border-fuchsia-500/50'
             : (isHovered ? 'w-72 h-16 rounded-2xl border-fuchsia-500' : 'w-16 h-16 rounded-[38%]')}
         `}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         {/* Top Control Bar */}
-        <div 
+        <div
           className="w-full h-16 flex items-center justify-center shrink-0 cursor-pointer relative group/inner"
           onClick={togglePlay}
         >
@@ -145,13 +175,13 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ onPlayChange, hideButton = fa
           <div className="flex items-center justify-center shrink-0 z-10">
             <div className="relative flex items-center justify-center w-8 h-8 shrink-0">
               {isPlaying ? (
-                 <div className="flex gap-1 items-center h-4">
-                   <div className="w-1 bg-fuchsia-500 h-full animate-[bounce_0.5s_infinite]"></div>
-                   <div className="w-1 bg-fuchsia-500 h-3/4 animate-[bounce_0.7s_infinite]"></div>
-                   <div className="w-1 bg-fuchsia-500 h-full animate-[bounce_0.6s_infinite]"></div>
-                 </div>
+                <div className="flex gap-1 items-center h-4">
+                  <div className="w-1 bg-fuchsia-500 h-full animate-[bounce_0.5s_infinite]"></div>
+                  <div className="w-1 bg-fuchsia-500 h-3/4 animate-[bounce_0.7s_infinite]"></div>
+                  <div className="w-1 bg-fuchsia-500 h-full animate-[bounce_0.6s_infinite]"></div>
+                </div>
               ) : (
-                 <div className="w-0 h-0 border-t-[8px] border-t-transparent border-l-[12px] border-l-fuchsia-500 border-b-[8px] border-b-transparent ml-1.5 drop-shadow-[0_0_5px_rgba(217,70,239,0.8)]"></div>
+                <div className="w-0 h-0 border-t-[8px] border-t-transparent border-l-[12px] border-l-fuchsia-500 border-b-[8px] border-b-transparent ml-1.5 drop-shadow-[0_0_5px_rgba(217,70,239,0.8)]"></div>
               )}
             </div>
 
@@ -159,7 +189,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ onPlayChange, hideButton = fa
               relative h-6 overflow-hidden transition-all duration-500
               ${isHovered ? 'opacity-100 max-w-[200px] ml-2' : 'opacity-0 max-w-0 ml-0'}
             `}>
-              <div 
+              <div
                 className="flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
                 style={{ transform: `translateY(${isPlaying ? '-50%' : '0%'})` }}
               >
@@ -179,33 +209,33 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ onPlayChange, hideButton = fa
           w-full flex flex-col items-center px-6 transition-all duration-500 ease-out
           ${isExtended ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}
         `}>
-           <div className="w-full h-px bg-fuchsia-500/10 mb-6"></div>
-           
-           <div className="relative w-full flex items-center justify-between gap-4">
-              <div className="relative flex-1 h-12 bg-white/5 rounded-2xl flex items-center px-1 overflow-hidden">
-                  <input 
-                    type="range" 
-                    min="0" 
-                    max="1" 
-                    step="0.01" 
-                    value={volume} 
-                    onChange={handleVolumeChange}
-                    className="material-you-slider w-full h-10 cursor-pointer z-20"
-                    style={{
-                      '--volume-percent': `${volume * 100}%`
-                    } as React.CSSProperties}
-                  />
-              </div>
-              
-              <div className={`
+          <div className="w-full h-px bg-fuchsia-500/10 mb-6"></div>
+
+          <div className="relative w-full flex items-center justify-between gap-4">
+            <div className="relative flex-1 h-12 bg-white/5 rounded-2xl flex items-center px-1 overflow-hidden">
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={volume}
+                onChange={handleVolumeChange}
+                className="material-you-slider w-full h-10 cursor-pointer z-20"
+                style={{
+                  '--volume-percent': `${volume * 100}%`
+                } as React.CSSProperties}
+              />
+            </div>
+
+            <div className={`
                   flex flex-col items-end justify-center transition-all duration-700 ease-in-out w-16 shrink-0
                   ${isChanging ? 'text-fuchsia-400 drop-shadow-[0_0_12px_rgba(217,70,239,0.8)]' : 'text-white opacity-40'}
               `}>
-                  <span className="text-3xl font-bold tracking-tighter leading-none select-none" style={{ fontFamily: "'Orbitron', sans-serif" }}>
-                      {Math.round(volume * 100)}
-                  </span>
-              </div>
-           </div>
+              <span className="text-3xl font-bold tracking-tighter leading-none select-none" style={{ fontFamily: "'Orbitron', sans-serif" }}>
+                {Math.round(volume * 100)}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 

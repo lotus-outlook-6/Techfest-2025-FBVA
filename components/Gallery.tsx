@@ -27,17 +27,17 @@ const SPOTLIGHT_IMAGES = [
 
 const Gallery: React.FC = () => {
   const yPath = "M 25 30 H 85 L 120 80 L 155 30 H 215 L 145 130 V 210 H 95 V 130 L 25 30 Z";
-  
+
   const containerRef = useRef<HTMLDivElement>(null);
   const parallaxRef = useRef<SVGGElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gallerySectionRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLElement>(null);
-  
+
   const [images, setImages] = useState<GalleryImage[]>(INITIAL_IMAGES);
   const [phase, setPhase] = useState<AnimPhase>('idle');
   const [isHovered, setIsHovered] = useState(false);
-  const [fillProgress, setFillProgress] = useState(0); 
+  const [fillProgress, setFillProgress] = useState(0);
   const [isDraining, setIsDraining] = useState(false);
   const isAnimatingRef = useRef(false);
   const fillRequestRef = useRef<number | null>(null);
@@ -46,8 +46,8 @@ const Gallery: React.FC = () => {
   const [showSlider, setShowSlider] = useState(true);
   const [autoRotation, setAutoRotation] = useState(0);
   const rotationRef = useRef(0);
-  
-  const [sliderValue, setSliderValue] = useState(0); 
+
+  const [sliderValue, setSliderValue] = useState(0);
   const [isSliderHovered, setIsSliderHovered] = useState(false);
   const isHoldingSlider = useRef(false);
   const [isManualInteraction, setIsManualInteraction] = useState(false);
@@ -68,7 +68,7 @@ const Gallery: React.FC = () => {
 
     let width = window.innerWidth;
     let height = window.innerHeight;
-    
+
     const handleResize = () => {
       width = window.innerWidth;
       height = window.innerHeight;
@@ -87,7 +87,7 @@ const Gallery: React.FC = () => {
     };
 
     const animate = (time: number) => {
-      const easing = 0.08; 
+      const easing = 0.08;
       smoothedRef.current.x += (mouseRef.current.x - smoothedRef.current.x) * easing;
       smoothedRef.current.y += (mouseRef.current.y - smoothedRef.current.y) * easing;
 
@@ -109,7 +109,7 @@ const Gallery: React.FC = () => {
       }
 
       if (!isHoldingSlider.current && Math.abs(sliderValue) > 0.1) {
-        setSliderValue(prev => prev * 0.82); 
+        setSliderValue(prev => prev * 0.82);
       } else if (!isHoldingSlider.current && Math.abs(sliderValue) <= 0.1) {
         setSliderValue(0);
       }
@@ -163,7 +163,7 @@ const Gallery: React.FC = () => {
     if (isDraining) {
       const drain = () => {
         setFillProgress(prev => {
-          const next = prev - 3.0; 
+          const next = prev - 3.0;
           if (next <= 0) {
             setIsDraining(false);
             triggerAnimationSequence();
@@ -178,7 +178,7 @@ const Gallery: React.FC = () => {
     } else if (isHovered && fillProgress < 100) {
       const fill = () => {
         setFillProgress(prev => {
-          const next = prev + 1.2; 
+          const next = prev + 1.2;
           if (next >= 100) {
             setIsDraining(true);
             return 100;
@@ -192,7 +192,7 @@ const Gallery: React.FC = () => {
     } else if (!isHovered && fillProgress > 0) {
       const unfill = () => {
         setFillProgress(prev => {
-          const next = prev - 2.0; 
+          const next = prev - 2.0;
           if (next <= 0) return 0;
           fillRequestRef.current = requestAnimationFrame(unfill);
           return next;
@@ -227,7 +227,7 @@ const Gallery: React.FC = () => {
     if (resumeTimerRef.current) window.clearTimeout(resumeTimerRef.current);
     resumeTimerRef.current = window.setTimeout(() => {
       setIsManualInteraction(false);
-    }, 2000); 
+    }, 2000);
   };
 
   const handleYearTrigger = () => {
@@ -249,7 +249,7 @@ const Gallery: React.FC = () => {
     setTimeout(() => {
       setPhase('idle');
       isAnimatingRef.current = false;
-      setFillProgress(0); 
+      setFillProgress(0);
       setIsDraining(false);
     }, 5400);
   };
@@ -264,11 +264,11 @@ const Gallery: React.FC = () => {
 
     return {
       opacity: isGlowVisible ? 1 : 0.7,
-      filter: isGlowVisible 
-        ? `drop-shadow(0 0 30px rgba(255,255,255,${isActivelyPopped ? 0.8 : 0.2}))` 
+      filter: isGlowVisible
+        ? `drop-shadow(0 0 30px rgba(255,255,255,${isActivelyPopped ? 0.8 : 0.2}))`
         : 'none',
-      transform: isActivelyPopped 
-        ? 'scale(1.1) translateZ(150px)' 
+      transform: isActivelyPopped
+        ? 'scale(1.1) translateZ(150px)'
         : 'scale(1) translateZ(-80px)',
       transition: 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)'
     };
@@ -318,7 +318,7 @@ const Gallery: React.FC = () => {
   };
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="relative block w-full h-full bg-transparent select-none overflow-y-auto overflow-x-hidden scroll-smooth"
       style={{ WebkitFontSmoothing: 'antialiased', perspective: '1200px' }}
@@ -376,7 +376,7 @@ const Gallery: React.FC = () => {
             <span className="gallery-depth-text text-[3rem] md:text-[6rem] lg:text-[8rem]" style={getTextStyle('g')}>GALLERY</span>
           </div>
 
-          <div 
+          <div
             className="relative pointer-events-auto"
             style={{ transform: 'translateZ(0px)', transformStyle: 'preserve-3d' }}
             onMouseEnter={() => setIsHovered(true)}
@@ -404,9 +404,9 @@ const Gallery: React.FC = () => {
                 <g clipPath="url(#yClipStrict)">
                   <g clipPath="url(#yFillMask)">
                     <g transform={`translate(0, ${210 - (fillProgress * 1.8)})`}>
-                       <path className="white-wave opacity-90 shadow-[0_0_20px_white]" d="M 0 0 C 40 -20, 80 20, 120 0 C 160 -20, 200 20, 240 0 C 280 -20, 320 20, 360 0 C 400 -20, 440 20, 480 0 C 520 -20, 560 20, 600 0 V 300 H 0 Z" />
-                       <path className="white-wave opacity-50" style={{ animationDuration: '3.0s', animationDirection: 'reverse' }} d="M 0 5 C 50 15, 100 -5, 150 5 C 200 15, 250 -5, 300 5 C 350 15, 400 -5, 450 5 C 500 15, 550 -5, 600 5 V 300 H 0 Z" />
-                       <path className="white-wave opacity-30" style={{ animationDuration: '4.2s' }} d="M 0 -8 C 60 5, 120 -15, 180 -8 C 240 5, 300 -15, 360 -8 C 420 5, 480 -15, 540 -8 C 600 5, 660 -15, 720 -8 V 300 H 0 Z" />
+                      <path className="white-wave opacity-90 shadow-[0_0_20px_white]" d="M 0 0 C 40 -20, 80 20, 120 0 C 160 -20, 200 20, 240 0 C 280 -20, 320 20, 360 0 C 400 -20, 440 20, 480 0 C 520 -20, 560 20, 600 0 V 300 H 0 Z" />
+                      <path className="white-wave opacity-50" style={{ animationDuration: '3.0s', animationDirection: 'reverse' }} d="M 0 5 C 50 15, 100 -5, 150 5 C 200 15, 250 -5, 300 5 C 350 15, 400 -5, 450 5 C 500 15, 550 -5, 600 5 V 300 H 0 Z" />
+                      <path className="white-wave opacity-30" style={{ animationDuration: '4.2s' }} d="M 0 -8 C 60 5, 120 -15, 180 -8 C 240 5, 300 -15, 360 -8 C 420 5, 480 -15, 540 -8 C 600 5, 660 -15, 720 -8 V 300 H 0 Z" />
                     </g>
                   </g>
                 </g>
@@ -416,7 +416,7 @@ const Gallery: React.FC = () => {
           </div>
         </div>
 
-        <button 
+        <button
           onClick={scrollToGallery}
           className="absolute bottom-32 left-1/2 -translate-x-1/2 z-20 group flex flex-col items-center outline-none animate-bounce-subtle"
         >
@@ -436,11 +436,11 @@ const Gallery: React.FC = () => {
             </h3>
           </div>
 
-          <div 
+          <div
             className="relative w-full min-h-[300px] md:min-h-[460px] flex items-center justify-center perspective-[1500px] overflow-visible cursor-default"
-            onClick={() => { if(isExpanded) handleCollapse(); }}
+            onClick={() => { if (isExpanded) handleCollapse(); }}
           >
-            <div 
+            <div
               className="relative w-[160px] md:w-[480px] aspect-[16/10] flex items-center justify-center"
               style={{ transformStyle: 'preserve-3d' }}
             >
@@ -459,10 +459,10 @@ const Gallery: React.FC = () => {
                 const scale = isExpanded ? (0.7 + (Math.cos(rad) + 1) * 0.3) : 1;
                 const zIndex = isExpanded ? 0 : count - index;
                 return (
-                  <div 
+                  <div
                     key={img.id}
                     className="absolute inset-0 rounded-2xl md:rounded-3xl border border-white/10 overflow-hidden bg-[#0c0c0c] transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]"
-                    style={{ 
+                    style={{
                       transitionProperty: isExpanded ? 'opacity, scale, border-color, box-shadow' : 'all',
                       transform: `translate3d(${x.toFixed(2)}px, 0, ${z.toFixed(2)}px) rotateZ(${rotateZ}deg) scale(${scale.toFixed(2)})`,
                       opacity: opacity,
@@ -488,17 +488,17 @@ const Gallery: React.FC = () => {
           {/* Slider for Gallery Navigation */}
           <div className="flex w-full max-w-lg px-6 md:px-10 relative overflow-visible h-20 flex-col items-center mt-12 md:mt-16">
             <div className={`w-full flex flex-col items-center transition-opacity duration-1000 ease-[cubic-bezier(0.19,1,0.22,1)] ${showSlider ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-               <div className="relative w-full h-10 flex items-center group/slider" onMouseEnter={() => setIsSliderHovered(true)} onMouseLeave={() => setIsSliderHovered(false)}>
-                 {(isSliderHovered || isHoldingSlider.current) && (
-                   <div className="slider-cursor-glow" style={{ left: `calc(${(sliderValue + 100) / 2}% - 0px)`, top: '50%' }} />
-                 )}
-                 <div className="absolute left-0 right-0 h-[3px] bg-white/10 rounded-full"></div>
-                 <input type="range" min="-100" max="100" step="0.1" value={sliderValue} onChange={handleSliderChange} onMouseDown={() => { isHoldingSlider.current = true; resetManualInteractionTimer(); }} onMouseUp={() => { isHoldingSlider.current = false; }} onMouseLeave={() => { isHoldingSlider.current = false; }} onTouchStart={() => { isHoldingSlider.current = true; resetManualInteractionTimer(); }} onTouchEnd={() => { isHoldingSlider.current = false; }} className="gallery-slider relative z-20" />
-                 <div className={`absolute top-1/2 -translate-y-1/2 w-[80px] h-[22px] rounded-full flex items-center justify-between px-3 pointer-events-none slider-pill-thumb ${(isSliderHovered || isHoldingSlider.current) ? 'bg-fuchsia-500 shadow-[0_0_60px_#d946ef,0_0_30px_rgba(217,70,239,0.8),0_0_15px_rgba(255,255,255,0.4)] scale-110' : 'bg-white shadow-[0_0_30px_rgba(255,255,255,0.7),0_0_10px_rgba(255,255,255,0.3)]'}`} style={{ left: `calc(${(sliderValue + 100) / 2}% - 40px)`, zIndex: 25 }}>
-                   <span className={`arrow-flow-text flow-rtl text-[26px] ${(isSliderHovered || isHoldingSlider.current) ? 'arrows-inverted' : 'arrows-normal'}`}>«</span>
-                   <span className={`arrow-flow-text flow-ltr text-[26px] ${(isSliderHovered || isHoldingSlider.current) ? 'arrows-inverted' : 'arrows-normal'}`}>»</span>
-                 </div>
-               </div>
+              <div className="relative w-full h-10 flex items-center group/slider" onMouseEnter={() => setIsSliderHovered(true)} onMouseLeave={() => setIsSliderHovered(false)}>
+                {(isSliderHovered || isHoldingSlider.current) && (
+                  <div className="slider-cursor-glow" style={{ left: `calc(${(sliderValue + 100) / 2}% - 0px)`, top: '50%' }} />
+                )}
+                <div className="absolute left-0 right-0 h-[3px] bg-white/10 rounded-full"></div>
+                <input type="range" min="-100" max="100" step="0.1" value={sliderValue} onChange={handleSliderChange} onMouseDown={() => { isHoldingSlider.current = true; resetManualInteractionTimer(); }} onMouseUp={() => { isHoldingSlider.current = false; }} onMouseLeave={() => { isHoldingSlider.current = false; }} onTouchStart={() => { isHoldingSlider.current = true; resetManualInteractionTimer(); }} onTouchEnd={() => { isHoldingSlider.current = false; }} className="gallery-slider relative z-20" />
+                <div className={`absolute top-1/2 -translate-y-1/2 w-[80px] h-[22px] rounded-full flex items-center justify-between px-3 pointer-events-none slider-pill-thumb ${(isSliderHovered || isHoldingSlider.current) ? 'bg-fuchsia-500 shadow-[0_0_60px_#d946ef,0_0_30px_rgba(217,70,239,0.8),0_0_15px_rgba(255,255,255,0.4)] scale-110' : 'bg-white shadow-[0_0_30px_rgba(255,255,255,0.7),0_0_10px_rgba(255,255,255,0.3)]'}`} style={{ left: `calc(${(sliderValue + 100) / 2}% - 40px)`, zIndex: 25 }}>
+                  <span className={`arrow-flow-text flow-rtl text-[26px] ${(isSliderHovered || isHoldingSlider.current) ? 'arrows-inverted' : 'arrows-normal'}`}>«</span>
+                  <span className={`arrow-flow-text flow-ltr text-[26px] ${(isSliderHovered || isHoldingSlider.current) ? 'arrows-inverted' : 'arrows-normal'}`}>»</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -571,11 +571,11 @@ const Gallery: React.FC = () => {
           <div className="absolute bottom-4 left-0 right-0 flex flex-col items-center gap-4">
             <span className="text-white text-xs md:text-lg font-anton tracking-[0.4em] uppercase opacity-90 drop-shadow-lg">OUR SOCIAL HANDLES</span>
             <div className="flex flex-wrap justify-center gap-5 md:gap-8 items-center">
-              <a href="https://www.instagram.com/_yantraksh_" target="_blank" rel="noopener noreferrer" className="text-white hover:text-fuchsia-500 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849s-.011 3.585-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.849-.07c-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849s.012-3.584.07-4.849c.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.058-1.28.072-1.689.072-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.28-.058-1.689-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-              <a href="https://www.facebook.com/share/17egUW6dfC/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue-500 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.5-10 10.04 0 5 3.66 9.14 8.44 9.88v-6.99h-2.54v-2.89h2.54v-2.2c0-2.5 1.52-3.89 3.77-3.89 1.08 0 2.2.19 2.2.19v2.43h-1.24c-1.24 0-1.63.77-1.63 1.56v1.91h2.74l-.44 2.89h-2.3v6.99c4.78-.74 8.44-4.88 8.44-9.88 0-5.54-4.5-10.04-10-10.04z"/></svg></a>
-              <a href="https://x.com/_Yantraksh_" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-400 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-              <a href="https://www.linkedin.com/in/yantraksh" target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue-600 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
-              <a href="mailto:yantraksh2026@gmail.com" className="text-white hover:text-fuchsia-500 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+              <a href="https://www.instagram.com/yantraksh.tssot/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-fuchsia-500 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849s-.011 3.585-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.849-.07c-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849s.012-3.584.07-4.849c.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.058-1.28.072-1.689.072-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.28-.058-1.689-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" /></svg></a>
+              <a href="https://www.facebook.com/profile.php?id=61586670172969" target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue-500 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.5-10 10.04 0 5 3.66 9.14 8.44 9.88v-6.99h-2.54v-2.89h2.54v-2.2c0-2.5 1.52-3.89 3.77-3.89 1.08 0 2.2.19 2.2.19v2.43h-1.24c-1.24 0-1.63.77-1.63 1.56v1.91h2.74l-.44 2.89h-2.3v6.99c4.78-.74 8.44-4.88 8.44-9.88 0-5.54-4.5-10.04-10-10.04z" /></svg></a>
+              <a href="https://x.com/yantrakshTSSOT" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-400 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg></a>
+              <a href="https://www.linkedin.com/in/yantraksh26/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue-600 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg></a>
+              <a href="mailto:yantraksh2026@gmail.com" className="text-white hover:text-fuchsia-500 transition-all duration-300 hover:scale-125"><svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" /></svg></a>
             </div>
             <p className="text-gray-500 text-[8px] md:text-[9px] uppercase tracking-[0.3em] font-space opacity-50">made in collaboration of Lotus_Proton_6 & REET</p>
           </div>
